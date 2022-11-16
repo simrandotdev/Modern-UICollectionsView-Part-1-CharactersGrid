@@ -53,7 +53,6 @@ class SingleSectionCharactersViewController: UIViewController {
         
         // For Resizing Cells in CollectionView
         flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        flowLayout.headerReferenceSize = .init(width: 0, height: 44)
     }
 
 }
@@ -77,6 +76,14 @@ extension SingleSectionCharactersViewController: UICollectionViewDataSource, UIC
         return headerView
     }
     
+    // For calculating the height of HeaderView dynamically on large text size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let headerView = HeaderView()
+        headerView.setup(text: "Characters \(characters.count)")
+        return headerView.systemLayoutSizeFitting(.init(width: collectionView.bounds.width, height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
     
 }
 
