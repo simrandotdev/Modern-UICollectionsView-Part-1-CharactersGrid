@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B697F29248CF80083EB2B /* CharacterCell.swift */; };
 		3D5B6983292490790083EB2B /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B6982292490790083EB2B /* RoundedImageView.swift */; };
+		3D5B69852924911B0083EB2B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B69842924911B0083EB2B /* HeaderView.swift */; };
 		8B3AD8122523A87200663CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8112523A87200663CAF /* Assets.xcassets */; };
 		8B3AD81A2523A88600663CAF /* ff7r.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8162523A88600663CAF /* ff7r.json */; };
 		8B3AD81B2523A88600663CAF /* dc.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8172523A88600663CAF /* dc.json */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		3D5B697F29248CF80083EB2B /* CharacterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CharacterCell.swift; path = CharactersGrid/Views/CharacterCell.swift; sourceTree = SOURCE_ROOT; };
 		3D5B6982292490790083EB2B /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
+		3D5B69842924911B0083EB2B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		8B3AD8112523A87200663CAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B3AD8162523A88600663CAF /* ff7r.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ff7r.json; sourceTree = "<group>"; };
 		8B3AD8172523A88600663CAF /* dc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dc.json; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			children = (
 				3D5B697F29248CF80083EB2B /* CharacterCell.swift */,
 				3D5B6982292490790083EB2B /* RoundedImageView.swift */,
+				3D5B69842924911B0083EB2B /* HeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				8B89C3E625198F5D00B75EE4 /* UISegmentedControl+Universe.swift in Sources */,
 				3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */,
 				8B89C3B22519881100B75EE4 /* AppDelegate.swift in Sources */,
+				3D5B69852924911B0083EB2B /* HeaderView.swift in Sources */,
 				8B89C3D125198ACB00B75EE4 /* Character.swift in Sources */,
 				8B89C3B42519881100B75EE4 /* SceneDelegate.swift in Sources */,
 				8B89C3D325198B0200B75EE4 /* Stubs.swift in Sources */,
