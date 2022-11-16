@@ -23,6 +23,21 @@ class CharacterCell: UICollectionViewCell {
         fatalError("XIB/Storyboard is not supported for \(#file)")
     }
     
+    // For Resizing Cells in CollectionView
+    override func systemLayoutSizeFitting(_ targetSize: CGSize,
+                                          withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+                                          verticalFittingPriority: UILayoutPriority) -> CGSize {
+        
+        let padding: CGFloat = 8
+        let noOfItems = traitCollection.horizontalSizeClass == .compact ? 4 : 8
+        let itemWidth = (UIScreen.main.bounds.width - (padding * 2)) / CGFloat(noOfItems)
+        
+        return super.systemLayoutSizeFitting(CGSize(width: itemWidth,
+                                                    height: UIView.layoutFittingExpandedSize.height),
+                                             withHorizontalFittingPriority: .required,
+                                             verticalFittingPriority: .fittingSizeLevel)
+    }
+    
     private func setupLayout() {
         imageView.contentMode = .scaleAspectFit
         
@@ -31,6 +46,7 @@ class CharacterCell: UICollectionViewCell {
         textLabel.adjustsFontForContentSizeCategory = true
         
         textLabel.textAlignment = .center
+        textLabel.numberOfLines = 0
         
         vStack.axis = .vertical
         vStack.alignment = .center
