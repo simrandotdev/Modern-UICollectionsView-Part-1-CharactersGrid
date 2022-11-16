@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B697F29248CF80083EB2B /* CharacterCell.swift */; };
+		3D5B6983292490790083EB2B /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B6982292490790083EB2B /* RoundedImageView.swift */; };
 		8B3AD8122523A87200663CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8112523A87200663CAF /* Assets.xcassets */; };
 		8B3AD81A2523A88600663CAF /* ff7r.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8162523A88600663CAF /* ff7r.json */; };
 		8B3AD81B2523A88600663CAF /* dc.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B3AD8172523A88600663CAF /* dc.json */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D5B697F29248CF80083EB2B /* CharacterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CharacterCell.swift; path = CharactersGrid/Views/CharacterCell.swift; sourceTree = SOURCE_ROOT; };
+		3D5B6982292490790083EB2B /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
 		8B3AD8112523A87200663CAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B3AD8162523A88600663CAF /* ff7r.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ff7r.json; sourceTree = "<group>"; };
 		8B3AD8172523A88600663CAF /* dc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dc.json; sourceTree = "<group>"; };
@@ -51,6 +55,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D5B698129248D020083EB2B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3D5B697F29248CF80083EB2B /* CharacterCell.swift */,
+				3D5B6982292490790083EB2B /* RoundedImageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		8B3AD8152523A88600663CAF /* JSON */ = {
 			isa = PBXGroup;
 			children = (
@@ -83,9 +96,8 @@
 			children = (
 				8B89C3B12519881100B75EE4 /* AppDelegate.swift */,
 				8B89C3B32519881100B75EE4 /* SceneDelegate.swift */,
+				3D5B698129248D020083EB2B /* Views */,
 				8B89C3C8251989E700B75EE4 /* Models */,
-				8B89C3C9251989EA00B75EE4 /* Views */,
-				8B89C3C6251989DD00B75EE4 /* View Controllers */,
 				8B89C3C5251989D000B75EE4 /* Resources */,
 				8B89C3BF2519881200B75EE4 /* Info.plist */,
 			);
@@ -102,13 +114,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		8B89C3C6251989DD00B75EE4 /* View Controllers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "View Controllers";
-			sourceTree = "<group>";
-		};
 		8B89C3C8251989E700B75EE4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,13 +124,6 @@
 				8B89C3E525198F5D00B75EE4 /* UISegmentedControl+Universe.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		8B89C3C9251989EA00B75EE4 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,10 +202,12 @@
 				8B89C3D525198B5000B75EE4 /* SectionCharacters.swift in Sources */,
 				8B89C3D725198B8D00B75EE4 /* Universe.swift in Sources */,
 				8B89C3E625198F5D00B75EE4 /* UISegmentedControl+Universe.swift in Sources */,
+				3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */,
 				8B89C3B22519881100B75EE4 /* AppDelegate.swift in Sources */,
 				8B89C3D125198ACB00B75EE4 /* Character.swift in Sources */,
 				8B89C3B42519881100B75EE4 /* SceneDelegate.swift in Sources */,
 				8B89C3D325198B0200B75EE4 /* Stubs.swift in Sources */,
+				3D5B6983292490790083EB2B /* RoundedImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
