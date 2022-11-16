@@ -11,6 +11,8 @@ import SwiftUI
 class SingleSectionCharactersViewController: UIViewController {
 
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    @objc let segmentedControl = UISegmentedControl(items: Universe.allCases.map({ $0.title }))
+    
     var characters = Universe.ff7r.stubs {
         didSet {
             collectionView.reloadData()
@@ -21,6 +23,7 @@ class SingleSectionCharactersViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupLayout()
+        setupSegmentedController()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -42,6 +45,7 @@ class SingleSectionCharactersViewController: UIViewController {
         view.addSubview(collectionView)
     }
     
+    
     private func setupLayout() {
         guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
             return
@@ -54,7 +58,17 @@ class SingleSectionCharactersViewController: UIViewController {
         // For Resizing Cells in CollectionView
         flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
     }
+    
+    
+    private func setupSegmentedController() {
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        navigationItem.titleView = segmentedControl
+    }
 
+    @objc func segmentChanged(_ sender: UISegmentedControl) {
+        characters = sender.selectedUniverse.stubs
+    }
 }
 
 extension SingleSectionCharactersViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
