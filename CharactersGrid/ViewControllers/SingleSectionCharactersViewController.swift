@@ -24,6 +24,7 @@ class SingleSectionCharactersViewController: UIViewController {
         setupCollectionView()
         setupLayout()
         setupSegmentedController()
+        setupNavigationItem()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -59,6 +60,13 @@ class SingleSectionCharactersViewController: UIViewController {
         flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
     }
     
+    private func setupNavigationItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "shuffle"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(shuffleTapped))
+    }
+    
     
     private func setupSegmentedController() {
         segmentedControl.selectedSegmentIndex = 0
@@ -68,6 +76,10 @@ class SingleSectionCharactersViewController: UIViewController {
 
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         characters = sender.selectedUniverse.stubs
+    }
+    
+    @objc func shuffleTapped() {
+        characters.shuffle()
     }
 }
 
