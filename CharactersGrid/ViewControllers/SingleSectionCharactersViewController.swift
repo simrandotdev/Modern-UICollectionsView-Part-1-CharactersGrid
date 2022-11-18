@@ -61,6 +61,7 @@ class SingleSectionCharactersViewController: UIViewController {
             }
             
         } completion: { (_) in
+            // Update header view is needed seperately because perform Batch Updates will only do the cells
             let headerIndexPaths = self.collectionView.indexPathsForVisibleSupplementaryElements(ofKind: UICollectionView.elementKindSectionHeader)
             headerIndexPaths.forEach { indexPath in
                 let headerView = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: indexPath) as! HeaderView
