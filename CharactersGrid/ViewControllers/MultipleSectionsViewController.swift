@@ -15,7 +15,7 @@ class MultipleSectionsViewController: UIViewController {
     
     var sectionStubs = Universe.ff7r.sectionedStubs {
         didSet {
-            collectionView.reloadData()
+            updateCollectionView(oldSectionItems: oldValue, newSectionItems: sectionStubs)
         }
     }
     
@@ -124,6 +124,54 @@ extension MultipleSectionsViewController: UICollectionViewDataSource, UICollecti
         return headerView.systemLayoutSizeFitting(.init(width: collectionView.bounds.width, height: UIView.layoutFittingExpandedSize.height),
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    private func updateCollectionView(oldSectionItems: [SectionCharacters], newSectionItems: [SectionCharacters]) {
+        var sectionsToInsert = IndexSet()
+        var sectionsToRemove = IndexSet()
+        var indexPathsToRemove = [IndexPath]()
+        var indexPathsToInsert = [IndexPath]()
+        
+        let sectionDiff = newSectionItems.difference(from: oldSectionItems)
+        sectionDiff.forEach { (change) in
+            switch change {
+            case let .remove(offset, _, _):
+                sectionsToRemove.insert(offset)
+            case let .insert(offset, _, _):
+                sectionsToInsert.insert(offset)
+            }
+        }
+        
+        (0..<newSectionItems.count).forEach { (index) in
+            let newSection = newSectionItems[index]
+            if let oldSectionIndex = oldSectionItems.firstIndex(where: { $0 == newSection }) {
+                let oldSection = oldSectionItems[oldSectionIndex]
+                let diff = newSection.characters.difference(from: oldSection.characters)
+                diff.forEach { (change) in
+                    switch change {
+                    case let .remove(offset, _, _):
+                        indexPathsToRemove.append(IndexPath(item: offset, section: oldSectionIndex))
+                    case let .insert(offset, _, _):
+                        indexPathsToInsert.append(IndexPath(item: offset, section: index))
+                    }
+                }
+            }
+        }
+        
+        collectionView.performBatchUpdates {
+            self.collectionView.deleteSections(sectionsToRemove)
+            self.collectionView.deleteItems(at: indexPathsToRemove)
+            self.collectionView.insertSections(sectionsToInsert)
+            self.collectionView.insertItems(at: indexPathsToInsert)
+        } completion: { (_) in
+            let headerIndexPaths = self.collectionView.indexPathsForVisibleSupplementaryElements(ofKind: UICollectionView.elementKindSectionHeader)
+            headerIndexPaths.forEach { (indexPath) in
+                let headerView = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: indexPath) as! HeaderView
+                let section = self.sectionStubs[indexPath.section]
+                headerView.setup(text: "\(section.category) (\(section.characters.count))".uppercased())
+            }
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
     
 }
