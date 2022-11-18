@@ -15,7 +15,7 @@ class SingleSectionCharactersViewController: UIViewController {
     
     var characters = Universe.ff7r.stubs {
         didSet {
-            collectionView.reloadData()
+            updateCollectionView(oldItems: oldValue, newItems: characters)
         }
     }
     
@@ -44,6 +44,30 @@ class SingleSectionCharactersViewController: UIViewController {
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         
         view.addSubview(collectionView)
+    }
+    
+    private func updateCollectionView(oldItems: [Character], newItems: [Character]) {
+        
+        collectionView.performBatchUpdates {
+            
+            let diff = newItems.difference(from: oldItems)
+            diff.forEach { change in
+                switch change {
+                case .remove(let offset, _, _):
+                    self.collectionView.deleteItems(at: [IndexPath(item: offset, section: 0)])
+                case .insert(let offset, _, _):
+                    self.collectionView.insertItems(at: [IndexPath(item: offset, section: 0)])
+                }
+            }
+            
+        } completion: { (_) in
+            let headerIndexPaths = self.collectionView.indexPathsForVisibleSupplementaryElements(ofKind: UICollectionView.elementKindSectionHeader)
+            headerIndexPaths.forEach { indexPath in
+                let headerView = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: indexPath) as! HeaderView
+                headerView.setup(text: "\(self.characters.count) character(s)")
+            }
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
     
     
