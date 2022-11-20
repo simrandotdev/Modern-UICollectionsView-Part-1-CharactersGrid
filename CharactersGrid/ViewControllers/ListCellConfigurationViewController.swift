@@ -36,6 +36,10 @@ class ListCellConfigurationViewController: UIViewController {
         }
     }()
     
+    
+    // FOR CHECKMARKS
+    var selectedCharacters = Set<Character>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -64,6 +68,15 @@ class ListCellConfigurationViewController: UIViewController {
             content.imageProperties.maximumSize = .init(width: 60, height: 60)
             content.imageProperties.cornerRadius = 30
             cell.contentConfiguration = content
+            
+            if self.selectedCharacters.contains(model) {
+                cell.accessories = [
+                    .checkmark(),
+                    .disclosureIndicator()
+                ]
+            } else {
+                cell.accessories = [.disclosureIndicator()]
+            }
         })
         
         
@@ -127,6 +140,20 @@ extension ListCellConfigurationViewController: UICollectionViewDataSource, UICol
         return headerView
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let character = sectionedCharacters[indexPath.section].characters[indexPath.item]
+        
+        if self.selectedCharacters.contains(character) {
+            selectedCharacters.remove(character)
+        } else {
+            selectedCharacters.insert(character)
+        }
+        
+        collectionView.performBatchUpdates {
+            self.collectionView.reloadItems(at: [indexPath])
+        }
+    }
+    
     
     // For calculating the height of HeaderView dynamically on large text size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
