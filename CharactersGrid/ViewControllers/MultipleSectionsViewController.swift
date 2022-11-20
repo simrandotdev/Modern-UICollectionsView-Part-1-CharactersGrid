@@ -19,6 +19,8 @@ class MultipleSectionsViewController: UIViewController {
         }
     }
     
+    private var cellRegistration: UICollectionView.CellRegistration<CharacterCell, Character>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -40,7 +42,10 @@ class MultipleSectionsViewController: UIViewController {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: "Cell")
+//        collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: "Cell")
+        cellRegistration = UICollectionView.CellRegistration(handler: { cell, _, itemIdentifier in
+            cell.setup(character: itemIdentifier)
+        })
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         
         view.addSubview(collectionView)
@@ -99,9 +104,8 @@ extension MultipleSectionsViewController: UICollectionViewDataSource, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CharacterCell
         let character = sectionStubs[indexPath.section].characters[indexPath.item]
-        cell.setup(character: character)
+        let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: character)
         return cell
     }
     
