@@ -20,6 +20,7 @@ class MultipleSectionsViewController: UIViewController {
     }
     
     private var cellRegistration: UICollectionView.CellRegistration<CharacterCell, Character>!
+    private var headerRegistration: UICollectionView.SupplementaryRegistration<HeaderView>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +47,11 @@ class MultipleSectionsViewController: UIViewController {
         cellRegistration = UICollectionView.CellRegistration(handler: { cell, _, itemIdentifier in
             cell.setup(character: itemIdentifier)
         })
-        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+//        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        headerRegistration = UICollectionView.SupplementaryRegistration(elementKind: UICollectionView.elementKindSectionHeader, handler: { headerView, _, indexPath in
+            let section = self.sectionStubs[indexPath.section]
+            headerView.setup(text: "\(section.category) \(section.characters.count)".uppercased())
+        })
         
         view.addSubview(collectionView)
     }
@@ -110,11 +115,7 @@ extension MultipleSectionsViewController: UICollectionViewDataSource, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! HeaderView
-        
-        let section = sectionStubs[indexPath.section]
-        headerView.setup(text: "\(section.category) \(section.characters.count)".uppercased())
-        
+        let headerView = collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
         return headerView
     }
     
