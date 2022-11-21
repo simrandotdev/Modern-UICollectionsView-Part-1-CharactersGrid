@@ -25,5 +25,12 @@ struct Character: Codable, Hashable, Identifiable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(category)
-    }    
+    }
+    
+    static func ==(lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.imageName == rhs.imageName &&
+        lhs.category == rhs.category
+    }
 }

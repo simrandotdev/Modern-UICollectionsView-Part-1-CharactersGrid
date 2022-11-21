@@ -18,6 +18,9 @@ class DiffableDataSourceViewController: UIViewController {
     )
     var backingStore: [SectionCharactersTuple]
     
+    // Diffable DataSource
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Character>!
+    
     private var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, Character>!
     private var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>!
     
@@ -37,6 +40,8 @@ class DiffableDataSourceViewController: UIViewController {
         setupCollectionView()
         setupSegmentedControl()
         setupBaritems()
+        setupDataSource()
+        setupSnapshot(store: backingStore)
     }
     
     private func setupSegmentedControl() {
@@ -71,18 +76,53 @@ class DiffableDataSourceViewController: UIViewController {
         
         headerRegistration = UICollectionView.SupplementaryRegistration(elementKind: UICollectionView.elementKindSectionHeader, handler: { [weak self] (header: UICollectionViewListCell, _, indexPath) in
             guard let self = self else { return }
-            let (section, characters) = self.backingStore[indexPath.section]
-            var content = header.defaultContentConfiguration()
-            content.text = section.headerTitleText(count: characters.count)
-            header.contentConfiguration = content
+            self.configureHeaderView(header, at: indexPath)
         })
-        
-        collectionView.dataSource = self
     }
     
+    private func setupDataSource() {
+        // Cell
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier -> UICollectionViewCell? in
+            guard let self = self else { return nil }
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration, for: indexPath, item: itemIdentifier)
+            return cell
+        })
+        
+        // Header
+        dataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView in
+            guard let self = self else { return UICollectionReusableView() }
+            
+            let headerView = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration, for: indexPath)
+            return headerView
+        }
+    }
+    
+    private func configureHeaderView(_ headerView: UICollectionViewListCell, at indexPath: IndexPath) {
+        
+        guard let character = dataSource.itemIdentifier(for: indexPath),
+              let section = dataSource.snapshot().sectionIdentifier(containingItem: character) else { return }
+        
+        let count = dataSource.snapshot().itemIdentifiers(inSection: section).count
+        
+        var content = headerView.defaultContentConfiguration()
+        content.text = section.headerTitleText(count: count)
+        headerView.contentConfiguration = content
+    }
+    
+    private func setupSnapshot(store: [SectionCharactersTuple]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Character>()
+        store.forEach { sectionCharacters in
+            let (section, characters) = sectionCharacters
+            snapshot.appendSections([section])
+            snapshot.appendItems(characters, toSection: section)
+        }
+        
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+ 
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         backingStore = sender.selectedUniverse.sectionedStubsTuple
-        collectionView.reloadData()
+        setupSnapshot(store: backingStore)
     }
     
     @objc private func shuffleTapped(_ sender: Any) {
@@ -95,28 +135,6 @@ class DiffableDataSourceViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("Please initialize programaticaly instead of using Storyboard/XiB")
-    }
-}
-
-extension DiffableDataSourceViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        backingStore.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        backingStore[section].characters.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let character = backingStore[indexPath.section].characters[indexPath.item]
-        let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: character)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
-        return headerView
     }
 }
 
