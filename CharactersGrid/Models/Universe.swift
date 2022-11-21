@@ -43,6 +43,23 @@ enum Universe: CaseIterable {
         return sectionedStubs
     }
     
+    var sectionedStubsTuple: [SectionCharactersTuple] {
+            let stubs = self.stubs
+            var categoryCharactersDict = [String: [Character]]()
+            stubs.forEach { (character) in
+                let category = character.category
+                if let characters = categoryCharactersDict[category] {
+                    categoryCharactersDict[category] = characters + [character]
+                } else {
+                    categoryCharactersDict[category] = [character]
+                }
+            }
+            let sectionedStubs = categoryCharactersDict.map { (category, items) -> (Section, [Character]) in
+                (Section(category: category), items)
+            }.sorted { $0.0.category < $1.0.category }
+            return sectionedStubs
+        }
+    
     var title: String {
         switch self {
         case .ff7r:

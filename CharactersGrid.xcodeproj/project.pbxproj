@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D357388292BC965008E3AE7 /* DiffableDataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D357387292BC965008E3AE7 /* DiffableDataSourceViewController.swift */; };
+		3D35738A292BCA67008E3AE7 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D357389292BCA67008E3AE7 /* Section.swift */; };
 		3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B697F29248CF80083EB2B /* CharacterCell.swift */; };
 		3D5B6983292490790083EB2B /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B6982292490790083EB2B /* RoundedImageView.swift */; };
 		3D5B69852924911B0083EB2B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B69842924911B0083EB2B /* HeaderView.swift */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D357387292BC965008E3AE7 /* DiffableDataSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableDataSourceViewController.swift; sourceTree = "<group>"; };
+		3D357389292BCA67008E3AE7 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		3D5B697F29248CF80083EB2B /* CharacterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CharacterCell.swift; path = CharactersGrid/Views/CharacterCell.swift; sourceTree = SOURCE_ROOT; };
 		3D5B6982292490790083EB2B /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
 		3D5B69842924911B0083EB2B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -79,6 +83,7 @@
 				3D5B69BF2925360C0083EB2B /* SingleSectionCharactersViewController.swift */,
 				3DA819E22927BF6400B60E5E /* MultipleSectionsViewController.swift */,
 				3DD0B340292AEA7500A8D89E /* ListCellConfigurationViewController.swift */,
+				3D357387292BC965008E3AE7 /* DiffableDataSourceViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 				8B89C3D225198B0200B75EE4 /* Stubs.swift */,
 				8B89C3D425198B5000B75EE4 /* SectionCharacters.swift */,
 				8B89C3E525198F5D00B75EE4 /* UISegmentedControl+Universe.swift */,
+				3D357389292BCA67008E3AE7 /* Section.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -219,8 +225,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D35738A292BCA67008E3AE7 /* Section.swift in Sources */,
 				8B89C3D525198B5000B75EE4 /* SectionCharacters.swift in Sources */,
 				8B89C3D725198B8D00B75EE4 /* Universe.swift in Sources */,
+				3D357388292BC965008E3AE7 /* DiffableDataSourceViewController.swift in Sources */,
 				8B89C3E625198F5D00B75EE4 /* UISegmentedControl+Universe.swift in Sources */,
 				3D5B69C02925360C0083EB2B /* SingleSectionCharactersViewController.swift in Sources */,
 				3D5B698029248CF80083EB2B /* CharacterCell.swift in Sources */,
