@@ -16,14 +16,17 @@ class DiffableDataSourceViewController: UIViewController {
     private var segmentedControl = UISegmentedControl(
         items: Universe.allCases.map { $0.title }
     )
+    // Data for collection View with Sections and Characters for each section
     var backingStore: [SectionCharactersTuple]
     
     // Diffable DataSource
     private var dataSource: UICollectionViewDiffableDataSource<Section, Character>!
     
+    // Properties to hold what we show in the cell and header
     private var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, Character>!
     private var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>!
     
+    // Layout to decide what kind of layout we need for collection view.
     private lazy var listLayout: UICollectionViewLayout = {
         var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         listConfig.headerMode = .supplementary
@@ -126,11 +129,15 @@ class DiffableDataSourceViewController: UIViewController {
     }
     
     @objc private func shuffleTapped(_ sender: Any) {
-        // TODO: Implement Shuffle Array for backing store
+        backingStore = backingStore.map {
+            ($0.section, $0.characters.shuffled())
+        }
+        setupSnapshot(store: backingStore)
     }
     
     @objc private func resetTapped(_ sender: Any) {
-        // TODO: Reset backing store to initial state
+        backingStore = segmentedControl.selectedUniverse.sectionedStubsTuple
+        setupSnapshot(store: backingStore)
     }
     
     required init?(coder: NSCoder) {
