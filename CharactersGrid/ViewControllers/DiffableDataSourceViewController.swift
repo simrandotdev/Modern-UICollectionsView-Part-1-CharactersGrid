@@ -129,9 +129,11 @@ class DiffableDataSourceViewController: UIViewController {
     }
     
     @objc private func shuffleTapped(_ sender: Any) {
-        backingStore = backingStore.map {
-            ($0.section, $0.characters.shuffled())
-        }
+        backingStore = backingStore
+            .shuffled()
+            .map {
+                ($0.section, $0.characters.shuffled())
+            }
         setupSnapshot(store: backingStore)
     }
     
