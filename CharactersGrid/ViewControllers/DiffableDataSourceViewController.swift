@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 typealias SectionCharactersTuple = (section: Section, characters: [Character])
 
@@ -17,7 +18,10 @@ class DiffableDataSourceViewController: UIViewController {
         items: Universe.allCases.map { $0.title }
     )
     // Data for collection View with Sections and Characters for each section
-    var backingStore: [SectionCharactersTuple]
+    private var backingStore: [SectionCharactersTuple]
+    private var searchText = PassthroughSubject<String, Never>()
+    private var cancellables = Set<AnyCancellable>()
+    
     
     // Diffable DataSource
     private var dataSource: UICollectionViewDiffableDataSource<Section, Character>!
@@ -43,6 +47,8 @@ class DiffableDataSourceViewController: UIViewController {
         setupCollectionView()
         setupSegmentedControl()
         setupBaritems()
+        setupSearchbar()
+        setupSearchTextObserver()
         setupDataSource()
         setupSnapshot(store: backingStore)
     }
@@ -112,6 +118,13 @@ class DiffableDataSourceViewController: UIViewController {
         headerView.contentConfiguration = content
     }
     
+    private func reloadHeaderView() {
+        collectionView.indexPathsForVisibleSupplementaryElements(ofKind: UICollectionView.elementKindSectionHeader).forEach { indexPath in
+            guard let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: indexPath) as? UICollectionViewListCell else { return }
+            self.configureHeaderView(headerView, at: indexPath)
+        }
+    }
+    
     private func setupSnapshot(store: [SectionCharactersTuple]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Character>()
         store.forEach { sectionCharacters in
@@ -120,7 +133,36 @@ class DiffableDataSourceViewController: UIViewController {
             snapshot.appendItems(characters, toSection: section)
         }
         
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadHeaderView)
+    }
+    
+    private func setupSearchbar() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+    }
+    
+    private func setupSearchTextObserver() {
+        searchText
+            .debounce(for: .milliseconds(600), scheduler: RunLoop.main)
+            .map { $0.lowercased() }
+            .sink {[weak self] searchText in
+                
+                guard let self = self else { return }
+                
+                if searchText.isEmpty {
+                    self.setupSnapshot(store: self.backingStore)
+                } else {
+                    let filteredSections = self.backingStore
+                        .map {
+                            ($0.section, $0.characters.filter { $0.name.lowercased().contains(searchText) })
+                        }
+                        .filter { !$0.1.isEmpty }
+                    self.setupSnapshot(store: filteredSections)
+                }
+            }
+            .store(in: &cancellables)
     }
  
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
@@ -144,6 +186,13 @@ class DiffableDataSourceViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("Please initialize programaticaly instead of using Storyboard/XiB")
+    }
+}
+
+extension DiffableDataSourceViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        searchText.send(searchController.searchBar.text ?? "")
     }
 }
 
