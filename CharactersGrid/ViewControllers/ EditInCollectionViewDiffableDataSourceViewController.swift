@@ -84,7 +84,7 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
         
         cellRegistration = UICollectionView.CellRegistration(
             handler: { (cell: UICollectionViewListCell, _, character: Character) in
-                var content = cell.defaultContentConfiguration()
+                var content = UIListContentConfiguration.valueCell()
                 content.text = character.name
                 content.secondaryText = character.category
                 content.image = UIImage(named: character.imageName)
@@ -140,6 +140,24 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
             guard let self = self else { return UICollectionReusableView() }
             let headerView = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration, for: indexPath)
             return headerView
+        }
+        
+        dataSource.reorderingHandlers.canReorderItem = { character -> Bool in
+            return (self.navigationItem.searchController?.searchBar.text ?? "").isEmpty
+        }
+        
+        dataSource.reorderingHandlers.didReorder = { transaction in
+            var backingStore = self.backingStore
+            
+            for sectionTransaction in transaction.sectionTransactions {
+                let sectionIdentifier = sectionTransaction.sectionIdentifier
+                
+                if let sectionIndex = transaction.finalSnapshot.indexOfSection(sectionIdentifier) {
+                    backingStore[sectionIndex].characters = sectionTransaction.finalSnapshot.items
+                }
+            }
+            self.backingStore = backingStore
+            self.reloadHeaders()
         }
     }
     
