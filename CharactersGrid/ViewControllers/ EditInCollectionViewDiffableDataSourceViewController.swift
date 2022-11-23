@@ -18,6 +18,7 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
     
     var backingStore: [SectionCharactersTuple]
     private var dataSource: UICollectionViewDiffableDataSource<Section, Character>!
+    private var selectedCharacters = Set<Character>()
     
     private var searchTextSubject = PassthroughSubject<String, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -82,12 +83,24 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
                 content.imageProperties.maximumSize = .init(width: 60, height: 60)
                 content.imageProperties.cornerRadius = 30
                 cell.contentConfiguration = content
+                
+                
+                // Setting the accessory check mark
+                var accessories: [UICellAccessory] = []
+                
+                if self.selectedCharacters.contains(character) {
+                    accessories.append(.checkmark(displayed: .whenEditing))
+                }
+                
+                cell.accessories = accessories
             })
         
         headerRegistration = UICollectionView.SupplementaryRegistration(elementKind: UICollectionView.elementKindSectionHeader, handler: { [weak self](header: UICollectionViewListCell, _, indexPath) in
             guard let self = self else { return }
             self.configureHeaderView(header, at: indexPath)
         })
+        
+        collectionView.delegate = self
     }
     
     private func setupDataSource() {
@@ -176,6 +189,23 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
         fatalError("Please initialize programatically instead of using Storyboard/XiB")
     }
 
+}
+
+extension EditInCollectionViewDiffableDataSourceViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let character = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        if selectedCharacters.contains(character) {
+            selectedCharacters.remove(character)
+        } else {
+            selectedCharacters.insert(character)
+        }
+        
+        var snapshot = dataSource.snapshot()
+        snapshot.reloadItems([character])
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 extension EditInCollectionViewDiffableDataSourceViewController: UISearchResultsUpdating {
