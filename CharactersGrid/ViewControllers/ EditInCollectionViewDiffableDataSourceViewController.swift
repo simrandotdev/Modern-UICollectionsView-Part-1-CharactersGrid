@@ -29,6 +29,14 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
     private lazy var listLayout: UICollectionViewLayout = {
         var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         listConfig.headerMode = .supplementary
+        listConfig.trailingSwipeActionsConfigurationProvider = { indexPath -> UISwipeActionsConfiguration? in
+            guard let character = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
+            
+            return UISwipeActionsConfiguration(actions: [UIContextualAction(style: .destructive, title: "Delete", handler: { [weak self] action, view, completion in
+                self?.deleteCharacter(character)
+                completion(true)
+            })])
+        }
         return UICollectionViewCompositionalLayout.list(using: listConfig)
     }()
         
