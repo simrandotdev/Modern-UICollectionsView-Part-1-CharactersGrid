@@ -62,10 +62,18 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
     }
     
     private func setupBaritems() {
+        
+        navigationItem.leftBarButtonItem = editButtonItem
+        
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: "shuffle"), style: .plain, target: self, action: #selector(shuffleTapped)),
             UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise.circle"), style: .plain, target: self, action: #selector(resetTapped))
         ]
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        collectionView.isEditing = editing
     }
     
     private func setupCollectionView() {
@@ -86,7 +94,12 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
                 
                 
                 // Setting the accessory check mark
-                var accessories: [UICellAccessory] = []
+                var accessories: [UICellAccessory] = [
+                    .delete(displayed: .whenEditing, actionHandler: {
+                        
+                    }),
+                    .reorder(displayed: .whenEditing)
+                ]
                 
                 if self.selectedCharacters.contains(character) {
                     accessories.append(.checkmark(displayed: .whenEditing))
