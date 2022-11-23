@@ -96,7 +96,7 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
                 // Setting the accessory check mark
                 var accessories: [UICellAccessory] = [
                     .delete(displayed: .whenEditing, actionHandler: {
-                        
+                        self.deleteCharacter(character)
                     }),
                     .reorder(displayed: .whenEditing)
                 ]
@@ -114,6 +114,19 @@ class EditInCollectionViewDiffableDataSourceViewController: UIViewController {
         })
         
         collectionView.delegate = self
+    }
+    
+    private func deleteCharacter(_ character: Character) {
+        guard let indexPath = dataSource.indexPath(for: character) else {
+            return
+        }
+        
+        backingStore[indexPath.section].characters.remove(at: indexPath.item)
+        selectedCharacters.remove(character)
+        
+        var snapShot = dataSource.snapshot()
+        snapShot.deleteItems([character])
+        dataSource.apply(snapShot, animatingDifferences: true)
     }
     
     private func setupDataSource() {
